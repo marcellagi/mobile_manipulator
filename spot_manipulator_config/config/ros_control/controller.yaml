@@ -1,0 +1,29 @@
+"":
+# Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50
+
+  # Position Controllers --------------------------------------
+  eff_joint_traj_controller:
+    type: effort_controllers/JointTrajectoryController
+    joints: &robot_joints
+      - Rev3
+      - Rev6
+      - Rev7
+      - Rev8
+      - Rev9
+      - Rev10
+      - Rev11
+    gains: # Required because we're controlling an effort interface
+      Rev3: {p: 4000,  d: 200, i: 1, i_clamp: 1}
+      Rev6: {p: 10000,  d: 200, i: 1, i_clamp: 1}
+      Rev7: {p: 2000,  d: 20, i: 1, i_clamp: 1}
+      Rev8: {p: 500,  d: 1, i: 1, i_clamp: 1}
+      Rev9: {p: 500,  d: 1, i: 1, i_clamp: 1}
+      Rev10: {p: 10,  d: 0.1, i: 0, i_clamp: 1} 
+      Rev11: {p: 10,  d: 0.1, i: 0, i_clamp: 1} 
+
+  joint_group_eff_controller:
+    type: effort_controllers/JointGroupEffortController
+    joints: *robot_joints

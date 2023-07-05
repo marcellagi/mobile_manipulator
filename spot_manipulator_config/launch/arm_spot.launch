@@ -1,0 +1,26 @@
+<launch>
+  <arg name="spot_arm_control_file"      default="$(find spot_manipulator_config)/config/ros_control/controller.yaml" />
+
+  <!-- <param command="$(find xacro)/xacro $(find spot_arm_description)/urdf/spot_arm.xacro" name="robot_description"/>
+  <node args="-param robot_description -urdf -model spot_arm" name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"/> -->
+
+  <arg name="controller_config_file" default="$(find spot_manipulator_config)/config/ros_control/controller.yaml" doc="Config file used for defining the ROS-Control controllers."/>
+  <arg name="controllers" default="joint_state_controller eff_joint_traj_controller" doc="Controllers that are activated by default."/>
+  <arg name="stopped_controllers" default="joint_group_eff_controller" doc="Controllers that are initally loaded, but not started."/>
+
+  <!-- Load controller settings -->
+  <rosparam file="$(arg controller_config_file)" command="load"/>
+
+  <node name="robot_state_publisher" output="screen" pkg="robot_state_publisher"          respawn="false" type="robot_state_publisher">
+  <remap from="/joint_states" to="/spot_arm/joint_states"/>
+  </node>
+  
+  <!-- Load and start the controllers listed in the 'controllers' arg. -->
+  <node name="ros_control_controller_spawner" pkg="controller_manager" type="spawner"
+    args="$(arg controllers)" output="screen" respawn="false" />
+
+  <!-- Load other controllers, but do not start them -->
+  <node name="ros_control_stopped_spawner" pkg="controller_manager" type="spawner"
+    args="--stopped $(arg stopped_controllers)" output="screen" respawn="false" />
+
+</launch>

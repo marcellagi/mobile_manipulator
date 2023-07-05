@@ -1,0 +1,52 @@
+"":
+  joint_states_controller:
+      type: joint_state_controller/JointStateController
+      publish_rate: 50
+
+  joint_group_position_controller:
+      type: effort_controllers/JointTrajectoryController
+      joints:
+          - front_left_hip_x
+          - front_left_hip_y
+          - front_left_knee
+          - front_right_hip_x
+          - front_right_hip_y
+          - front_right_knee
+          - rear_left_hip_x
+          - rear_left_hip_y
+          - rear_left_knee
+          - rear_right_hip_x
+          - rear_right_hip_y
+          - rear_right_knee
+
+      gains:
+        front_left_hip_x  : {p: 600, i: 0.9, d: 20}
+        front_left_hip_y  : {p: 600, i: 0.9, d: 20}
+        front_left_knee   : {p: 600, i: 0.9, d: 20}
+        front_right_hip_x : {p: 600, i: 0.9, d: 20}
+        front_right_hip_y : {p: 600, i: 0.9, d: 20}
+        front_right_knee  : {p: 600, i: 0.9, d: 20}
+        rear_left_hip_x   : {p: 600, i: 0.9, d: 20}
+        rear_left_hip_y   : {p: 600, i: 0.9, d: 20}
+        rear_left_knee    : {p: 600, i: 0.9, d: 20}
+        rear_right_hip_x  : {p: 600, i: 0.9, d: 20}
+        rear_right_hip_y  : {p: 600, i: 0.9, d: 20}
+        rear_right_knee   : {p: 600, i: 0.9, d: 20}
+
+#   eff_joint_traj_controller:
+#       type: effort_controllers/JointTrajectoryController
+#       joints: &robot_joints
+#           - Rev1
+#           - Rev2
+#           - Rev3
+#           - Rev4
+#           - Rev5
+#           - Rev6
+
+#       gains: # Required because we're controlling an effort interface
+#         Rev1: {p: 100,  d: 10, i: 1, i_clamp: 1}
+#         Rev2: {p: 100,  d: 10, i: 1, i_clamp: 1}
+#         Rev3: {p: 100,  d: 10, i: 1, i_clamp: 1}
+#         Rev4: {p: 100,  d: 10, i: 1, i_clamp: 1}
+#         Rev5: {p: 100,  d: 10, i: 1, i_clamp: 1}
+#         Rev6: {p: 100,  d: 10, i: 1, i_clamp: 1} 
