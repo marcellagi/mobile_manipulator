@@ -20,6 +20,7 @@
     <arg if="$(eval arg('robot_name') == '/')"  name="frame_prefix" value="" />
     <arg unless="$(eval arg('robot_name') == '/')" name="frame_prefix" value="$(arg robot_name)/" />
 
+
     <include file="$(find champ_bringup)/launch/bringup.launch">
         <arg name="robot_name"             value="$(arg robot_name)"/>
         <arg name="base_frame"             value="$(arg base_frame)"/>
