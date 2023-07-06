@@ -22,7 +22,7 @@
             <arg name="close_loop_odom"        value="true"/>
         </include>
 
-        <param command="$(find xacro)/xacro $(find spot_manipulator_description)/urdf/spot.urdf" name="/spot/robot_description"/>
+        <param command="$(find xacro)/xacro $(find spot_manipulator_description)/urdf/spot.urdf.xacro" name="/spot/robot_description"/>
 
         <node  name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" args="-urdf -model $(arg robot_name)  
         -param /spot/robot_description -robot_namespace $(arg robot_name) 
