@@ -1,6 +1,5 @@
 <launch>   
-    <group ns="/spot">
-        <arg name="robot_name"         default="/spot"/> <!-- Change this for namespacing. -->
+        <arg name="robot_name"         default="/"/> <!-- Change this for namespacing. -->
         <arg name="rviz"               default="false"/> <!-- Set to true to run rviz in parallel. -->
         <arg name="lite"               default="false" />  <!-- Set to true if you're using CHAMP lite version. Only useful for microcontrollers. -->
         <arg name="ros_control_file"   default="$(find spot_manipulator_config)/config/ros_control/ros_control.yaml" /> <!-- Path to ROS Control configurations. Do not touch. -->
@@ -10,6 +9,8 @@
         <arg name="world_init_heading" default="0.0" /> <!-- Initial heading of the robot in Gazebo World -->
         <arg name="enable_contact_sensor" default="true" />
         <arg name="respawn_controller"    default="false"/>
+
+        <rosparam file="$(find spot_manipulator_config)/config/ros_control/gazebo_ros_control.yaml" command="load"/>
 
         <include file="$(find spot_manipulator_config)/launch/bringup.launch">
             <arg name="robot_name"             value="$(arg robot_name)"/>
@@ -22,17 +23,15 @@
             <arg name="close_loop_odom"        value="true"/>
         </include>
 
-        <param command="$(find xacro)/xacro $(find spot_manipulator_description)/urdf/spot.urdf.xacro" name="/spot/robot_description"/>
+        <param command="$(find xacro)/xacro $(find spot_manipulator_description)/urdf/spot.urdf.xacro" name="/robot_description"/>
 
         <node  name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" args="-urdf -model $(arg robot_name)  
-        -param /spot/robot_description -robot_namespace $(arg robot_name) 
+        -param /robot_description -robot_namespace $(arg robot_name) 
         -x $(arg world_init_x) -y $(arg world_init_y) -z $(arg world_init_z) -Y $(arg world_init_heading)" />
 
         <rosparam file="$(arg ros_control_file)" command="load"/>
-        <node name="controller_spawner" pkg="controller_manager" type="spawner" ns="/spot" respawn="$(arg respawn_controller)"
-            output="screen" args="joint_states_controller joint_group_position_controller">
+        <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="$(arg respawn_controller)"
+            output="screen" args="joint_states_controller joint_group_position_controller arm_position_controller">
         </node>
         <node if="$(arg enable_contact_sensor)"  pkg="champ_gazebo" name="contact_sensor" type="contact_sensor" output="screen"/>
-
-    </group>
 </launch>

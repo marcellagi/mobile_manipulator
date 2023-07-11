@@ -1,0 +1,8 @@
+gazebo_ros_control/pid_gains:
+  Rev9: {p: 100, d: 1, i: 1, i_clamp: 1 }
+  Rev8: {p: 100, d: 1, i: 1, i_clamp: 1 }
+  Rev11: {p: 100, d: 1, i: 1, i_clamp: 1 }
+  Rev3: {p: 100, d: 1, i: 1, i_clamp: 1 }
+  Rev10: {p: 100, d: 1, i: 1, i_clamp: 1 }
+  Rev6: {p: 100, d: 1, i: 1, i_clamp: 1 }
+  Rev7: {p: 100, d: 1, i: 1, i_clamp: 1 }

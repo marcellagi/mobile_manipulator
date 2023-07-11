@@ -21,6 +21,6 @@
     <node name="ros_control_controller_spawner" pkg="controller_manager" type="spawner" ns="/spot_arm" args="$(arg controllers)" output="screen" respawn="false" />
 
     <!-- Load other controllers, but do not start them -->
-    <node name="ros_control_stopped_spawner" pkg="controller_manager" type="spawner" ns="/spot_arm" args="--stopped $(arg stopped_controllers)" output="screen" respawn="false" />
+    
   </group>
 </launch>

@@ -15,6 +15,6 @@
     </include>
 
     <include file="$(find spot_manipulator_config)/launch/spawn_spot.launch"/>
-    <include file="$(find spot_manipulator_config)/launch/arm_spot.launch"/>
+    <!-- <include file="$(find spot_manipulator_config)/launch/arm_spot.launch"/> -->
 
 </launch>
