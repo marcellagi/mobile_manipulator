@@ -20,7 +20,7 @@
   <!-- Included URDF/XACRO Files -->
   <xacro:include filename="$(find husky_description)/urdf/decorations.urdf.xacro" />
   <xacro:include filename="$(find husky_description)/urdf/wheel.urdf.xacro" />
-  <xacro:include filename="$(find cobra_description)/urdf/cobra.urdf.xacro" />
+  <xacro:include filename="$(find soft_mobile_manipulator_description)/urdf/cobra.urdf.xacro" />
 
   <xacro:include filename="$(find husky_description)/urdf/accessories/intel_realsense.urdf.xacro"/>
   <!-- <xacro:include filename="$(find husky_description)/urdf/accessories/sick_lms1xx_mount.urdf.xacro"/> -->
