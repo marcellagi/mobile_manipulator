@@ -8,7 +8,7 @@ $ ros2 launch soft_mobile_manipulator_control husky_playpen.launch.py
 ```
 
 ```sh
-$ ros2 launch cobra_description test_cobra.launch.py
+$ ros2 launch cobra_control cobra_teleop.launch.py 
 ```
 
 ```sh

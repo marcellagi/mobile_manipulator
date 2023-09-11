@@ -39,7 +39,7 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("soft_mobile_manipulator_description"), "urdf", "husky.urdf.xacro"]
+                [FindPackageShare("soft_mobile_manipulator_control"), "urdf", "husky.urdf.xacro"]
             ),
             " ",
             "name:=husky",

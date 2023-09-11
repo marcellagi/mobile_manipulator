@@ -24,6 +24,8 @@
   <depend>robot_state_publisher</depend>
   <depend>gazebo_ros_pkgs</depend>
   <depend>ros2launch</depend>
+  <depend>diff_drive_controller</depend>
+  <depend>soft_mobile_manipulator_description</depend>
   <export>
     <build_type>ament_cmake</build_type>
   </export>
