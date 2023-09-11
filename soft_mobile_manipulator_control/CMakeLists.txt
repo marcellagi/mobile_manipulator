@@ -11,6 +11,8 @@ find_package(ament_cmake REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
+# add_executable(husky_playpen launch/husky_playpen.launch.py)
+
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   # the following line skips the linter which checks for copyrights
@@ -22,5 +24,15 @@ if(BUILD_TESTING)
   set(ament_cmake_cpplint_FOUND TRUE)
   ament_lint_auto_find_test_dependencies()
 endif()
+
+install(DIRECTORY launch
+    
+  DESTINATION share/${PROJECT_NAME}/
+)
+
+#install(TARGETS
+  #husky_playpen
+  #DESTINATION lib/${PROJECT_NAME}/
+#)
 
 ament_package()

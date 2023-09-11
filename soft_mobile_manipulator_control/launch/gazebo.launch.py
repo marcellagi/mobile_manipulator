@@ -30,7 +30,7 @@ def generate_launch_description():
     prefix = LaunchConfiguration('prefix')
 
     config_husky_velocity_controller = PathJoinSubstitution(
-        [FindPackageShare("husky_control"), "config", "control.yaml"]
+        [FindPackageShare("soft_mobile_manipulator_control"), "config", "control.yaml"]
     )
 
     # Get URDF via xacro
@@ -39,7 +39,7 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("husky_description"), "urdf", "husky.urdf.xacro"]
+                [FindPackageShare("soft_mobile_manipulator_description"), "urdf", "husky.urdf.xacro"]
             ),
             " ",
             "name:=husky",

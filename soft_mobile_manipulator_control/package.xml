@@ -11,7 +11,19 @@
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
-
+  <depend>rclcpp</depend>
+  <depend>std_msgs</depend>
+  <depend>urdf</depend>
+  <depend>angles</depend>
+  <depend>gazebo_dev</depend>
+  <depend>gazebo_ros</depend>
+  <depend>controller_manager</depend>
+  <depend>hardware_interface</depend>
+  <depend>pluginlib</depend>
+  <depend>joint_state_publisher</depend>
+  <depend>robot_state_publisher</depend>
+  <depend>gazebo_ros_pkgs</depend>
+  <depend>ros2launch</depend>
   <export>
     <build_type>ament_cmake</build_type>
   </export>
