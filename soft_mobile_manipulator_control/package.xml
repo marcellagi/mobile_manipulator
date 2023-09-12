@@ -9,8 +9,11 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
+
+
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
+
   <depend>rclcpp</depend>
   <depend>std_msgs</depend>
   <depend>urdf</depend>
@@ -26,6 +29,11 @@
   <depend>ros2launch</depend>
   <depend>diff_drive_controller</depend>
   <depend>soft_mobile_manipulator_description</depend>
+
+  <depend>sensor_msgs</depend>
+  <depend>control_msgs</depend>
+  <depend>trajectory_msgs</depend>
+
   <export>
     <build_type>ament_cmake</build_type>
   </export>

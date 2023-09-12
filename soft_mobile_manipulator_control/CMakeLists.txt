@@ -7,11 +7,18 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(control_msgs REQUIRED)
+find_package(trajectory_msgs REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
-# add_executable(husky_playpen launch/husky_playpen.launch.py)
+add_executable(joint_control_node src/joint_control_node.cpp)
+
+ament_target_dependencies(joint_control_node rclcpp sensor_msgs control_msgs trajectory_msgs)
+
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -28,7 +35,12 @@ endif()
 install(DIRECTORY 
   launch
   config
+  src
   DESTINATION share/${PROJECT_NAME}/
 )
+
+install(TARGETS
+  joint_control_node
+  DESTINATION lib/${PROJECT_NAME})
 
 ament_package()
