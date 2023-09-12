@@ -11,8 +11,8 @@ controller_manager:
     position_controller:
       type: position_controllers/JointGroupPositionController
     
-    # joint_trajectory_controller:
-    #   type: "joint_trajectory_controller/JointTrajectoryController" 
+    joint_trajectory_controller:
+      type: "joint_trajectory_controller/JointTrajectoryController" 
 
 husky_velocity_controller:
   ros__parameters:
@@ -96,37 +96,68 @@ position_controller:
       - velocity
       - effort
 
-# joint_trajectory_controller:
-#   ros__parameters:
-#     joints:
-#       - cobra_body_1_joint
-#       - cobra_body_1_aux_joint
-#       - cobra_body_2_joint
-#       - cobra_body_2_aux_joint
-#       - cobra_body_3_joint
-#       - cobra_body_3_aux_joint      
-#       - cobra_body_4_joint
-#       - cobra_body_4_aux_joint
-#       - cobra_body_5_joint
-#       - cobra_body_5_aux_joint
-#       - cobra_body_6_joint
-#       - cobra_body_6_aux_joint  
+joint_trajectory_controller:
+  ros__parameters:
+    joints:
+      - cobra_body_1_joint
+      - cobra_body_1_aux_joint
+      - cobra_body_2_joint
+      - cobra_body_2_aux_joint
+      - cobra_body_3_joint
+      - cobra_body_3_aux_joint      
+      - cobra_body_4_joint
+      - cobra_body_4_aux_joint
+      - cobra_body_5_joint
+      - cobra_body_5_aux_joint
+      - cobra_body_6_joint
+      - cobra_body_6_aux_joint  
 
-#     command_interfaces:
-#       - position
+    command_interfaces:
+      - position
 
-#     state_interfaces:
-#       - position
-#       - velocity
+    state_interfaces:
+      - position
 
-#     state_publish_rate: 10.0
-#     action_monitor_rate: 20.0
+    state_publish_rate: 100.0
+    action_monitor_rate: 100.0
 
-#     allow_partial_joints_goal: false
-#     open_loop_control: true
-#     constraints:
-#       stopped_velocity_tolerance: 0.01
-#       goal_time: 0.0
-#       joint1:
-#         trajectory: 0.05
-#         goal: 0.03
+    constraints:
+      stopped_velocity_tolerance: 5.0
+      goal_time: 0.6
+      cobra_body_1_joint:
+        goal: 0.02
+      cobra_body_1_aux_joint:
+        goal: 0.02
+      cobra_body_2_joint:
+        goal: 0.02
+      cobra_body_2_aux_joint:
+        goal: 0.02
+      cobra_body_3_joint:
+        goal: 0.02
+      cobra_body_3_aux_joint:
+        goal: 0.02
+      cobra_body_4_joint:
+        goal: 0.02
+      cobra_body_4_aux_joint:
+        goal: 0.02
+      cobra_body_5_joint:
+        goal: 0.02
+      cobra_body_5_aux_joint:
+        goal: 0.02
+      cobra_body_6_joint:
+        goal: 0.02
+      cobra_body_6_aux_joint:
+        goal: 0.02
+    gains:
+      cobra_body_1_joint: {p: 1000.0, i: 0.0, d: 0.0}
+      cobra_body_1_aux_joint: {p: 1000.0, i: 0.0, d: 0.0}
+      cobra_body_2_joint: {p: 1000.0, i: 0.0, d: 0.0}
+      cobra_body_2_aux_joint: {p: 1000.0, i: 0.0, d: 0.0}
+      cobra_body_3_joint: {p: 1000.0, i: 0.0, d: 0.0}
+      cobra_body_3_aux_joint: {p: 1000.0, i: 0.0, d: 0.0}
+      cobra_body_4_joint: {p: 1000.0, i: 0.0, d: 0.0}
+      cobra_body_4_aux_joint: {p: 1000.0, i: 0.0, d: 0.0}
+      cobra_body_5_joint: {p: 1000.0, i: 0.0, d: 0.0}
+      cobra_body_5_aux_joint: {p: 1000.0, i: 0.0, d: 0.0}
+      cobra_body_6_joint: {p: 1000.0, i: 0.0, d: 0.0}
+      cobra_body_6_aux_joint: {p: 1000.0, i: 0.0, d: 0.0}

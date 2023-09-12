@@ -39,7 +39,7 @@ def generate_launch_description():
             PathJoinSubstitution([FindExecutable(name="xacro")]),
             " ",
             PathJoinSubstitution(
-                [FindPackageShare("soft_mobile_manipulator_control"), "urdf", "husky.urdf.xacro"]
+                [FindPackageShare("soft_mobile_manipulator_description"), "urdf", "husky.urdf.xacro"]
             ),
             " ",
             "name:=husky",
@@ -64,7 +64,7 @@ def generate_launch_description():
     spawn_cobra_controller = Node(
         package='controller_manager',
         executable='spawner',
-        arguments=['position_controller', '-c', '/controller_manager'],
+        arguments=['joint_trajectory_controller', '-c', '/controller_manager'],
         output='screen',
     )
 
