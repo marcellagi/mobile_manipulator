@@ -9,7 +9,9 @@ $ git clone -b 2-section git@github.com:Brazilian-Institute-of-Robotics/soft_gaz
 ```sh
 $ git clone -b humble-devel git@github.com:husky/husky.git 
 ```
-
+```sh
+$ git clone git@github.com:marcellagi/mobile_manipulator.git
+```
 
 ```sh
 $ ros2 launch soft_mobile_manipulator_control husky_playpen.launch.py
