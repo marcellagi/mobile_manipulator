@@ -5,7 +5,7 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, EnvironmentVariable, FindExecutable, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
-
+import launch_ros.actions
 from ament_index_python.packages import get_package_share_directory
 
 from pathlib import Path
@@ -133,7 +133,15 @@ def generate_launch_description():
     launch_husky_teleop_base = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(PathJoinSubstitution(
         [FindPackageShare("husky_control"), 'launch', 'teleop_base.launch.py'])))
-
+    
+    joy_node = launch_ros.actions.Node(
+        package='joy',
+        executable='joy_node',
+        name='joy_node',
+        parameters=[{'dev': '/dev/input/js0'}],
+        output='screen'
+    )
+    
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(gz_resource_path)
     ld.add_action(node_robot_state_publisher)
@@ -145,5 +153,6 @@ def generate_launch_description():
     ld.add_action(spawn_robot)
     ld.add_action(launch_husky_control)
     ld.add_action(launch_husky_teleop_base)
+    ld.add_action(joy_node)
 
     return ld

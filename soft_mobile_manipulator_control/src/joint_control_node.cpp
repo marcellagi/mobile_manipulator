@@ -1,6 +1,6 @@
 #include "rclcpp/rclcpp.hpp"
 #include "trajectory_msgs/msg/joint_trajectory.hpp"
-#include "control_msgs/action/follow_joint_trajectory.hpp" // Corrigido para importar a mensagem correta
+#include "control_msgs/action/follow_joint_trajectory.hpp" 
 #include "sensor_msgs/msg/joy.hpp"
 
 class JointControlNode : public rclcpp::Node {
@@ -12,57 +12,63 @@ public:
             std::bind(&JointControlNode::joy_callback, this, std::placeholders::_1)
         );
         
-        // Corrigido para usar a mensagem correta de trajectory_msgs
-        publisher_ = this->create_publisher<trajectory_msgs::msg::JointTrajectory>(
+        publisher_1 = this->create_publisher<trajectory_msgs::msg::JointTrajectory>(
             "/joint_trajectory_controller/joint_trajectory",
             10
         );
 
-        // Nomes das juntas
-        joint_names_0 = {
+        joint_names = {
             "cobra_body_1_joint", "cobra_body_1_aux_joint",
             "cobra_body_2_joint", "cobra_body_2_aux_joint",
-            "cobra_body_3_joint", "cobra_body_3_aux_joint"
-        };
-
-        joint_names_3 = {
+            "cobra_body_3_joint", "cobra_body_3_aux_joint",
             "cobra_body_4_joint", "cobra_body_4_aux_joint",
             "cobra_body_5_joint", "cobra_body_5_aux_joint",
             "cobra_body_6_joint", "cobra_body_6_aux_joint"
         };
+
     }
 
 private:
     void joy_callback(const sensor_msgs::msg::Joy::SharedPtr joy_msg) {
-        // Mapeia os valores dos joysticks para comandos de trajetória
-        auto joint_goal_msg = std::make_shared<trajectory_msgs::msg::JointTrajectory>();
-        joint_goal_msg->joint_names = (joy_msg->axes[0] != 0) ? joint_names_0 : joint_names_3;
 
-        // Define a posição das juntas com base nos valores dos joysticks
-        std::vector<double> positions = {
-            joy_msg->axes[0] * 0.5, 
-            joy_msg->axes[0] * 0.0,
-            joy_msg->axes[0] * 0.5,
-            joy_msg->axes[0] * 0.0,
-            joy_msg->axes[0] * 0.5,
-            joy_msg->axes[0] * 0.0
-        };
+        auto joint_goal_msg1 = std::make_shared<trajectory_msgs::msg::JointTrajectory>();
+        joint_goal_msg1->joint_names = joint_names;
 
-        // Cria um ponto de trajetória
-        trajectory_msgs::msg::JointTrajectoryPoint trajectory_point;
-        trajectory_point.positions = positions;
-        trajectory_point.time_from_start.sec = 1; // Substitua pelo tempo desejado
+        auto joint_goal_msg2 = std::make_shared<trajectory_msgs::msg::JointTrajectory>();
+        joint_goal_msg2->joint_names = joint_names;
+        
+          std::vector<double> positions1 = {
+              joy_msg->axes[0] * 0.5, 
+              joy_msg->axes[1] * 0.5,
+              joy_msg->axes[0] * 0.5,
+              joy_msg->axes[1] * 0.5,
+              joy_msg->axes[0] * 0.5,
+              joy_msg->axes[1] * 0.5,
+              joy_msg->axes[3] * 0.5, 
+              joy_msg->axes[4] * 0.5,
+              joy_msg->axes[3] * 0.5,
+              joy_msg->axes[4] * 0.5,
+              joy_msg->axes[3] * 0.5,
+              joy_msg->axes[4] * 0.5
+          };
+      
 
-        // Define os pontos de trajetória
-        joint_goal_msg->points.push_back(trajectory_point);
+        trajectory_msgs::msg::JointTrajectoryPoint trajectory_point1;
+        trajectory_point1.positions = positions1;
+        trajectory_point1.time_from_start.sec = 1; 
 
-        publisher_->publish(*joint_goal_msg);
+        joint_goal_msg1->points.push_back(trajectory_point1);
+
+   
+        publisher_1->publish(*joint_goal_msg1);
+
     }
 
     rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr subscription_;
-    rclcpp::Publisher<trajectory_msgs::msg::JointTrajectory>::SharedPtr publisher_;
-    std::vector<std::string> joint_names_0;
-    std::vector<std::string> joint_names_3;
+    rclcpp::Publisher<trajectory_msgs::msg::JointTrajectory>::SharedPtr publisher_1;
+   
+    std::vector<std::string> joint_names;
+
 };
 
 int main(int argc, char* argv[]) {
