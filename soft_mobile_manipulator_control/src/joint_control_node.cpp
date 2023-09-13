@@ -16,6 +16,10 @@ public:
             "/joint_trajectory_controller/joint_trajectory",
             10
         );
+        cmd_pub_ = this->create_publisher<geometry_msgs::msg::Twist>(
+            "joy_teleop/cmd_vel",
+            10 
+        );
 
         joint_names = {
             "cobra_body_1_joint", "cobra_body_1_aux_joint",
@@ -34,9 +38,19 @@ private:
         auto joint_goal_msg1 = std::make_shared<trajectory_msgs::msg::JointTrajectory>();
         joint_goal_msg1->joint_names = joint_names;
 
-        auto joint_goal_msg2 = std::make_shared<trajectory_msgs::msg::JointTrajectory>();
-        joint_goal_msg2->joint_names = joint_names;
-        
+        if (joy_msg->axes[2] < 0.9 || joy_msg->axes[5] < 0.9) {
+          geometry_msgs::msg::Twist cmd_vel;
+          cmd_vel.linear.x = joy_msg->axes[2];
+          cmd_vel.angular.z = joy_msg->axes[5];
+
+          cmd_pub_->publish(cmd_vel);
+
+        } else {
+           
+            geometry_msgs::msg::Twist stop_cmd;
+            cmd_pub_->publish(stop_cmd);
+        }
+
           std::vector<double> positions1 = {
               joy_msg->axes[1] * -0.5, 
               joy_msg->axes[0] * 0.5,
@@ -61,11 +75,13 @@ private:
 
    
         publisher_1->publish(*joint_goal_msg1);
+       
 
     }
 
     rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr subscription_;
     rclcpp::Publisher<trajectory_msgs::msg::JointTrajectory>::SharedPtr publisher_1;
+    rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_pub_;
    
     std::vector<std::string> joint_names;
 
