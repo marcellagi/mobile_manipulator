@@ -38,18 +38,18 @@ private:
         joint_goal_msg2->joint_names = joint_names;
         
           std::vector<double> positions1 = {
-              joy_msg->axes[0] * 0.5, 
-              joy_msg->axes[1] * 0.5,
+              joy_msg->axes[1] * -0.5, 
               joy_msg->axes[0] * 0.5,
-              joy_msg->axes[1] * 0.5,
+              joy_msg->axes[1] * -0.5,
               joy_msg->axes[0] * 0.5,
-              joy_msg->axes[1] * 0.5,
-              joy_msg->axes[3] * 0.5, 
-              joy_msg->axes[4] * 0.5,
+              joy_msg->axes[1] * -0.5,
+              joy_msg->axes[0] * 0.5,
+              joy_msg->axes[4] * -0.5, 
               joy_msg->axes[3] * 0.5,
-              joy_msg->axes[4] * 0.5,
+              joy_msg->axes[4] * -0.5,
               joy_msg->axes[3] * 0.5,
-              joy_msg->axes[4] * 0.5
+              joy_msg->axes[4] * -0.5,
+              joy_msg->axes[3] * 0.5
           };
       
 
