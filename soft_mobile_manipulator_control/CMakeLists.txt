@@ -19,6 +19,9 @@ add_executable(joint_control_node src/joint_control_node.cpp)
 
 ament_target_dependencies(joint_control_node rclcpp sensor_msgs control_msgs trajectory_msgs)
 
+add_executable(tf src/tf.cpp)
+
+ament_target_dependencies(tf rclcpp sensor_msgs geometry_msgs trajectory_msgs)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
@@ -41,6 +44,7 @@ install(DIRECTORY
 
 install(TARGETS
   joint_control_node
+  tf
   DESTINATION lib/${PROJECT_NAME})
 
 ament_package()

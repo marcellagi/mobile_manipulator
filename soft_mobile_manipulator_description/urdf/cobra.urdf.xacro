@@ -194,7 +194,7 @@
             <geometry>
                 <cylinder length="0.03" radius="0.02" />
             </geometry>
-            <material name="blue" />
+            <!-- <material name="blue" /> -->
         </visual>
         <collision>
             <origin xyz="0.0 0 0" rpy="0 0 0"/>
@@ -203,97 +203,7 @@
             </geometry>
             <self_collide>0</self_collide>
         </collision>
-        <!-- <xacro:inertial_box mass="0.1" x="0.12" y="0.15" z="0.15">
-            <origin xyz="0.0 0 0" rpy="0 0 0"/>
-        </xacro:inertial_box> -->
     </link>
-
-
-    <!-- <ros2_control name="GazeboSystem" type="system">
-      <hardware>
-        <plugin>gazebo_ros2_control/GazeboSystem</plugin>
-      </hardware>
-      <joint name="cobra_body_1_aux_joint">
-        <command_interface name="position"/>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
-        <state_interface name="effort"/>
-      </joint>
-      <joint name="cobra_body_1_joint">
-        <command_interface name="position"/>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
-        <state_interface name="effort"/>
-      </joint>
-      <joint name="cobra_body_2_aux_joint">
-        <command_interface name="position"/>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
-        <state_interface name="effort"/>
-      </joint>
-      <joint name="cobra_body_2_joint">
-        <command_interface name="position"/>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
-        <state_interface name="effort"/>
-      </joint> 
-      <joint name="cobra_body_3_aux_joint">
-        <command_interface name="position"/>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
-        <state_interface name="effort"/>
-      </joint>
-      <joint name="cobra_body_3_joint">
-        <command_interface name="position"/>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
-        <state_interface name="effort"/>
-      </joint>
-      <joint name="cobra_body_4_aux_joint">
-        <command_interface name="position"/>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
-        <state_interface name="effort"/>
-      </joint>
-      <joint name="cobra_body_4_joint">
-        <command_interface name="position"/>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
-        <state_interface name="effort"/>
-      </joint>
-      <joint name="cobra_body_5_aux_joint">
-        <command_interface name="position"/>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
-        <state_interface name="effort"/>
-      </joint>
-      <joint name="cobra_body_5_joint">
-        <command_interface name="position"/>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
-        <state_interface name="effort"/>
-      </joint> 
-      <joint name="cobra_body_6_aux_joint">
-        <command_interface name="position"/>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
-        <state_interface name="effort"/>
-      </joint>
-      <joint name="cobra_body_6_joint">
-        <command_interface name="position"/>
-        <state_interface name="position"/>
-        <state_interface name="velocity"/>
-        <state_interface name="effort"/>
-      </joint>
-    </ros2_control> -->
-
-    <!-- <gazebo>
-        <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
-        <robot_sim_type>gazebo_ros2_control/GazeboSystem</robot_sim_type>
-        <parameters>$(find cobra_control)/config/controllers.yaml</parameters>
-        </plugin>
-    </gazebo> -->
-
 
     <joint name="camera_optical_joint" type="fixed">
         <origin xyz="0 0 0" rpy="-1.571 0 -1.571" />
@@ -331,5 +241,51 @@
             </plugin>
         </sensor>
     </gazebo>
+
+
+    <joint name="imu_joint_manipulator" type="fixed">
+        <origin xyz="0.0 0 0.173" rpy="0 0 0" />
+        <parent link="cobra_body_6" />
+        <child link="imu_link_manipulator" />
+    </joint>
+
+    <link name="imu_link_manipulator"></link>
+
+    <gazebo reference="imu_link_manipulator">
+      <sensor name="imu_sensor" type="imu">
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin_1">
+          <ros>
+            <remapping>~/out:=imu/data_raw_1</remapping>
+          </ros>
+          <initial_orientation_as_reference>false</initial_orientation_as_reference>
+        </plugin>
+        <always_on>true</always_on>
+        <update_rate>100</update_rate>
+        <visualize>true</visualize>
+      </sensor>
+    </gazebo>
+
+    <joint name="imu_joint_manipulator_2" type="fixed">
+       <origin xyz="0.0 0 0.15" rpy="0 0 0" />
+       <parent link="cobra_body_3" />
+       <child link="imu_link_manipulator_2" />
+    </joint>
+
+    <link name="imu_link_manipulator_2"></link>
+
+    <gazebo reference="imu_link_manipulator_2">
+      <sensor name="imu_sensor_2" type="imu">
+        <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin_2">
+          <ros>
+            <remapping>~/out:=imu/data_raw_2</remapping>
+          </ros>
+          <initial_orientation_as_reference>false</initial_orientation_as_reference>
+        </plugin>
+        <always_on>true</always_on>
+        <update_rate>100</update_rate>
+        <visualize>true</visualize>
+      </sensor>
+    </gazebo>
+
 
 </robot>

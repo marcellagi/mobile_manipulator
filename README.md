@@ -30,5 +30,5 @@ points:
 ```
 
 ```sh
-$ ros2 run soft_mobile_manipulator_control joint_control_node.cpp
+$ ros2 run soft_mobile_manipulator_control joint_control_node
 ```
