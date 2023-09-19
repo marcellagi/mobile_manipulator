@@ -52,18 +52,18 @@ private:
         }
 
           std::vector<double> positions1 = {
-              joy_msg->axes[1] * -0.6, 
-              joy_msg->axes[0] * 0.6,
-              joy_msg->axes[1] * -0.6,
-              joy_msg->axes[0] * 0.6,
-              joy_msg->axes[1] * -0.6,
-              joy_msg->axes[0] * 0.6,
-              joy_msg->axes[4] * -0.6, 
-              joy_msg->axes[3] * 0.6,
-              joy_msg->axes[4] * -0.6,
-              joy_msg->axes[3] * 0.6,
-              joy_msg->axes[4] * -0.6,
-              joy_msg->axes[3] * 0.6
+              joy_msg->axes[1] * -0.5, 
+              joy_msg->axes[0] * 0.5,
+              joy_msg->axes[1] * -0.5,
+              joy_msg->axes[0] * 0.5,
+              joy_msg->axes[1] * -0.5,
+              joy_msg->axes[0] * 0.5,
+              joy_msg->axes[4] * -0.5, 
+              joy_msg->axes[3] * 0.5,
+              joy_msg->axes[4] * -0.5,
+              joy_msg->axes[3] * 0.5,
+              joy_msg->axes[4] * -0.5,
+              joy_msg->axes[3] * 0.5
           };
       
 
