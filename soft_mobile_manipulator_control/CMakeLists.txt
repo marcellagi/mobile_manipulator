@@ -16,14 +16,8 @@ find_package(rclpy REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
-
-
 add_executable(joint_control_node src/joint_control_node.cpp)
-
 ament_target_dependencies(joint_control_node rclcpp sensor_msgs control_msgs trajectory_msgs)
-
-
-
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

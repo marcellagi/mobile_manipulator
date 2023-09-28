@@ -1,0 +1,38 @@
+##########################
+## SIMULATION PARAMETERS
+##########################
+simulation_time: 100.0
+dt: 0.02 # Please use 0.02 for more precision. 
+         # If you want to speed up the simulation, use 0.04 (not recommended)
+n_links: 2 # Number of links in the robot
+plot_graphs: False # Plot graphs of position, velocity, and acceleration
+                   # at the end of the simulation
+isaac_sim_joints_per_segment: 3 # number of revolute joints per segment in
+
+##########################
+## CONFIGURATION SPACE
+##########################
+# INIT
+phi_angles_init: [0, 0] # Init angles. 
+                        # Do not set init or target angles to zero to
+                        # avoid numerical issues Init angles
+                        # Bending angle or inclination angle
+                        # Angle in Z axis
+theta_angles_init: [45, 45] # Bending angle or inclination angle
+                          # Angle in the y axis
+##########################
+## TARGET
+##########################
+# NOTE: Phi has a max angle of 90 degrees. If you want to 
+#       Bend in the +x direciton, change the theta angle instead
+phi_angles_target: [-45, 30] # Orientation angle
+                             # Angle in Z axis 
+theta_angles_target: [19, 45] # Bending angle or inclination angle
+                                        # Angle in the y axis
+
+##########################
+## SEGMENT LENGTHS
+##########################
+s: [1, 1]
+segment_length: [0.1036, 0.1036] # comprimento do segmento
+segment_normalized_size: [1, 1]
