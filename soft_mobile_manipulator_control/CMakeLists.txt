@@ -11,6 +11,7 @@ find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(control_msgs REQUIRED)
 find_package(trajectory_msgs REQUIRED)
+find_package(rclpy REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -45,7 +46,11 @@ install(DIRECTORY
 
 install(TARGETS
   joint_control_node
-
   DESTINATION lib/${PROJECT_NAME})
+
+install(PROGRAMS
+  src/imu_to_euler_node.py
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 ament_package()
