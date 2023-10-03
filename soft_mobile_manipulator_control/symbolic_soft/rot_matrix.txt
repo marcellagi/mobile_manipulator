@@ -1,0 +1,1 @@
+Matrix([[sin(phi)**2 + cos(phi)**2*cos(theta), (cos(theta) - 1)*sin(phi)*cos(phi), sin(theta)*cos(phi)], [(cos(theta) - 1)*sin(phi)*cos(phi), sin(phi)**2*cos(theta) + cos(phi)**2, sin(phi)*sin(theta)], [-sin(theta)*cos(phi), -sin(phi)*sin(theta), cos(theta)]])

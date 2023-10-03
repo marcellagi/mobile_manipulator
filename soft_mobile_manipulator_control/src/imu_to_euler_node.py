@@ -8,8 +8,8 @@ import yaml
 import os
 
 from ament_index_python.packages import get_package_share_directory
-from softrobots_dynamic_model.helper_funcs.plot_segment_general import PlotSegmentGeneral
-from softrobots_dynamic_model.helper_funcs.curves import PCCModel, PCCModelIMU, UTISpline
+from soft_mobile_manipulator_control.helper_funcs.plot_segment_general import PlotSegmentGeneral
+from soft_mobile_manipulator_control.helper_funcs.curves import PCCModel, PCCModelIMU, UTISpline
 
 
 def euler_from_quaternion(quaternion):

@@ -16,6 +16,8 @@ find_package(rclpy REQUIRED)
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
 
+
+
 add_executable(joint_control_node src/joint_control_node.cpp)
 ament_target_dependencies(joint_control_node rclcpp sensor_msgs control_msgs trajectory_msgs)
 
@@ -34,6 +36,7 @@ endif()
 install(DIRECTORY 
   launch
   config
+  helper_funcs
   src
   DESTINATION share/${PROJECT_NAME}/
 )
@@ -42,8 +45,12 @@ install(TARGETS
   joint_control_node
   DESTINATION lib/${PROJECT_NAME})
 
+  # Install Python modules
+ament_python_install_package(${PROJECT_NAME})
 install(PROGRAMS
   src/imu_to_euler_node.py
+  helper_funcs/curves.py
+  helper_funcs/plot_segment_general.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
