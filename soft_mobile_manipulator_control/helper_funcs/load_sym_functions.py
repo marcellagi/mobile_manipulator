@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import dataclasses
 import os
+import dataclasses
 
-import dill
 import numpy as np
+import dill
 
 
 @dataclasses.dataclass
@@ -67,7 +67,7 @@ class KinematicMatrices():
 class LoadSymbolic():
     """Class to load symbolic functions from dill files."""
 
-    def __init__(self, n_links):
+    def __init__(self, n_links, path=None):
         """
         Load symbolic functions from dill files.
 
@@ -75,13 +75,20 @@ class LoadSymbolic():
         ----------
         n_links: int
             Number of segments of the soft robot.
+        path: str
+            Path to the dill files.
 
         """
         self.n_links = n_links
 
-        dir_name = os.path.dirname
-        root_folder = dir_name(dir_name(dir_name(os.path.realpath(__file__))))
-        self.pkg_path = root_folder
+        if path is None:
+            # NOTE: We have to import this package here because this script is
+            # called using ROS or common python script. If we import this package
+            # using python script, the package will not be found.
+            from ament_index_python.packages import get_package_share_directory
+            self.pkg_path = get_package_share_directory('softrobots_dynamic_model')
+        else:
+            self.pkg_path = path
 
         # Open lambdified functions
         self.sym_seg_path =\

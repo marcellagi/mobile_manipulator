@@ -19,10 +19,10 @@ from ament_index_python.packages import get_package_share_directory
 from scipy import integrate
 from scipy.interpolate import CubicSpline
 
-from soft_mobile_manipulator_control.helper_funcs.load_sym_functions import \
+from softrobots_dynamic_model.helper_funcs.load_sym_functions import \
     LoadSymbolic
-from soft_mobile_manipulator_control.helper_funcs.kinematics import \
-    htm_rotation_around_x, htm_rotation_around_y, htm_rotation_around_z
+from softrobots_dynamic_model.helper_funcs.kinematics import \
+    rotation_matrix_x, rotation_matrix_y, rotation_matrix_z
 
 
 class GeneratelCurve():
@@ -52,8 +52,7 @@ class PCCModel(GeneratelCurve):
     def __init__(
         self,
         seg_param: dict,
-        n_links: int,
-        des_pos: np.array
+        n_links: int
     ):
         """
         Initialize parameters to plot the soft robot using matplotlib.
@@ -64,12 +63,9 @@ class PCCModel(GeneratelCurve):
             Segment parameters.
         n_links : int
             Number of links.
-        des_pos : np.array
-            Desired position.
 
         """
         self.pkg_path = get_package_share_directory('softrobots_dynamic_model')
-        self.des_pos = des_pos
 
         # Load symbolic functions - teste
         self.sym_functions = LoadSymbolic(n_links)
@@ -92,6 +88,7 @@ class PCCModel(GeneratelCurve):
     ):
         """
         Join n segments before plotting.
+
         It overrides the method from the GeneratelCurve abstract class.
 
         Parameters
@@ -258,6 +255,7 @@ class UTISpline(GeneratelCurve):
     ) -> np.array:
         """
         Generate curve to plot the robot shape.
+
         It overrides the method from the GeneratelCurve abstract class.
 
         The number of parameters of this method depends on the data needed to
@@ -390,6 +388,7 @@ class PCCModelIMU(GeneratelCurve):
     ):
         """
         Get the state data using IMUs.
+
         It overrides the method from the GeneratelCurve abstract class.
 
         Parameters
@@ -412,14 +411,14 @@ class PCCModelIMU(GeneratelCurve):
         number_of_imus = len(states_imu)
         for imu_index in range(number_of_imus):
             state_imu = states_imu[imu_index]
-            rotation_x = htm_rotation_around_x(state_imu[0])
-            rotation_y = htm_rotation_around_y(state_imu[1])
-            rotation_z = htm_rotation_around_z(state_imu[2])
+            rotation_x = rotation_matrix_x(state_imu[0])
+            rotation_y = rotation_matrix_y(state_imu[1])
+            rotation_z = rotation_matrix_z(state_imu[2])
 
             # Rotation matrices global are calculated
             # with respect to the world frame
-            rot_mat_world_zyx = rotation_z @ rotation_y @ rotation_x
             # rot_mat_world_zyx = rotation_x @ rotation_y @ rotation_z
+            rot_mat_world_zyx = rotation_z @ rotation_y @ rotation_x
 
             # Calculate the phi angle or the orientation (rotation around Z)
             if imu_index == 0:
@@ -446,15 +445,15 @@ class PCCModelIMU(GeneratelCurve):
                 # based on the phi and theta angles because the orientation
                 # of the next segment affects the orientation of the previous
                 # segment and we loose reference
-                rotation_y = htm_rotation_around_y(theta)
-                rotation_z = htm_rotation_around_z(phi)
+                rotation_y = rotation_matrix_y(theta)
+                rotation_z = rotation_matrix_z(phi)
                 rot_mat_reconstructed[imu_index] = rotation_z @ rotation_y
             else:
                 # Local rotation matrices are calculated
                 # with respect to the previous segment
                 rot_mat_local =\
                     np.linalg.inv(rot_mat_reconstructed[imu_index-1]) \
-                    @ rotation_z @ rotation_y @ rotation_x
+                    @ rot_mat_world_zyx
                 z_proj_prev_frame = rot_mat_local[:, 2]
                 phi = np.arctan2(z_proj_prev_frame[1], z_proj_prev_frame[0])
 
@@ -465,8 +464,10 @@ class PCCModelIMU(GeneratelCurve):
                 theta_signal = -1 if phi > np.pi/2 or phi < -np.pi/2 else 1
 
                 # Sum all previous phi angles
-                for phi_i in range(0, imu_index):
-                    phi += phi_list[phi_i]
+                if imu_index < number_of_imus - 1:
+                    for phi_i in range(0, imu_index):
+                        phi += phi_list[phi_i]
+
                 phi = self.fix_phi_angle(phi)
                 phi_list[imu_index] = phi
 
@@ -476,6 +477,7 @@ class PCCModelIMU(GeneratelCurve):
                 length = np.linalg.norm(rot_mat_local[:, 2])
                 normalized_third_column = rot_mat_local[:, 2] / length
                 theta = np.arccos(normalized_third_column[2]) * theta_signal
+                rot_mat_reconstructed[imu_index] = rot_mat_world_zyx
 
             state[imu_index*2:imu_index*2+2] =\
                 np.array([phi, theta]).reshape(-1, 1)

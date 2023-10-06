@@ -22,7 +22,7 @@ from sympy import (Matrix, MutableDenseNDimArray, cos, diff, eye, integrate,
                    lambdify, simplify, sin, symbols, zeros)
 
 
-def get_default_translation_and_rotation_matrices(
+def get_modified_translation_and_rotation_matrices_z_up(
     theta_vec: tuple,
     phi_vec: tuple,
     n_seg: int,
@@ -32,12 +32,8 @@ def get_default_translation_and_rotation_matrices(
     """
     Generate a modified version of the translation and rotation matrices.
 
-    The segment is already point in the -z direction and if theta is
-    positive, it bends towards the -x direction.
-    These matrices must be used with gravity 9.81 m/s^2 and positive
-    z axis when plotting. OBS: this is preferred over changing gravity
-    direction and inverting z when plotting because the mass matrix is
-    calculated using the modified translation and rotation matrices.
+    pointing in the +z direction. When theta is positive, the robot bends 
+    to the +x direction.
 
     Parameters
     ----------
@@ -63,8 +59,8 @@ def get_default_translation_and_rotation_matrices(
     # Translation vector
     transl_vec = Matrix([
         segment_len[n]/theta_vec[n] * Matrix([
-            (cos(phi_vec[n]) * (cos(norm_len_s*theta_vec[n]) - 1)),
-            sin(phi_vec[n]) * (cos(norm_len_s*theta_vec[n]) - 1),
+            (1 - cos(norm_len_s*theta_vec[n]))*cos(phi_vec[n]),
+            (1 - cos(norm_len_s*theta_vec[n]))*sin(phi_vec[n]),
             sin(norm_len_s*theta_vec[n])
         ]) for n in range(n_seg)
     ]).reshape(n_seg, 3)
@@ -72,25 +68,21 @@ def get_default_translation_and_rotation_matrices(
     # Rotation matrix
     rotation_matrix = Matrix([
         Matrix([
-            [
-                sin(phi_vec[n])**2 + cos(phi_vec[n])**2 *
-                cos(norm_len_s*theta_vec[n]),
-                (cos(norm_len_s*theta_vec[n]) - 1) *
-                sin(phi_vec[n])*cos(phi_vec[n]),
-                -sin(norm_len_s*theta_vec[n])*cos(phi_vec[n])
-            ],
-            [
-                (cos(norm_len_s*theta_vec[n]) - 1) *
-                sin(phi_vec[n])*cos(phi_vec[n]),
-                sin(phi_vec[n])**2*cos(norm_len_s *
-                                       theta_vec[n]) + cos(phi_vec[n])**2,
-                -sin(phi_vec[n])*sin(norm_len_s*theta_vec[n])
-            ],
-            [
-                sin(norm_len_s*theta_vec[n])*cos(phi_vec[n]),
-                sin(phi_vec[n])*sin(norm_len_s*theta_vec[n]),
-                cos(norm_len_s*theta_vec[n])
-            ]
+          [
+            sin(phi_vec[n])**2 + cos(phi_vec[n])**2*cos(norm_len_s*theta_vec[n]),
+            (cos(norm_len_s*theta_vec[n]) - 1)*sin(phi_vec[n])*cos(phi_vec[n]),
+            sin(norm_len_s*theta_vec[n])*cos(phi_vec[n])
+          ],
+          [
+            (cos(norm_len_s*theta_vec[n]) - 1)*sin(phi_vec[n])*cos(phi_vec[n]),
+            sin(phi_vec[n])**2*cos(norm_len_s*theta_vec[n]) + cos(phi_vec[n])**2,
+            sin(phi_vec[n])*sin(norm_len_s*theta_vec[n])
+          ],
+          [
+            -sin(norm_len_s*theta_vec[n])*cos(phi_vec[n]),
+            -sin(phi_vec[n])*sin(norm_len_s*theta_vec[n]),
+            cos(norm_len_s*theta_vec[n])
+          ]
         ])
         for n in range(n_seg)])
     return transl_vec, rotation_matrix
@@ -285,7 +277,7 @@ def generate_n_segment_symbolic_functions(n_seg: int):
     # segment is pointing in the direction of negative z-axis
     # Translation vector
     trans_vec, rotation_matrix =\
-        get_modified_translation_and_rotation_matrix(theta_vec, phi_vec, n_seg,
+        get_modified_translation_and_rotation_matrices_z_up(theta_vec, phi_vec, n_seg,
                                                      segment_len, norm_len_s)
 
     # Transformation matrices including translation and rotation

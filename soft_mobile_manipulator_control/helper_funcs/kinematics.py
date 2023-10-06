@@ -14,6 +14,27 @@
 
 import numpy as np
 
+
+def rotation_matrix_x(angle):
+    """
+    Rotation matrix around the x axis.
+
+    Parameters
+    ----------
+    angle: float
+        Rotation
+
+    Returns
+    -------
+    np.array
+        Rotation matrix
+
+    """
+    return np.array([[1, 0, 0],
+                     [0, np.cos(angle), -np.sin(angle)],
+                     [0, np.sin(angle), np.cos(angle)]])
+
+
 def rotation_matrix_y(angle):
     """
     Rotation matrix around the y axis.
