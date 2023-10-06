@@ -8,8 +8,8 @@ import yaml
 import os
 
 from ament_index_python.packages import get_package_share_directory
-from soft_mobile_manipulator_control.helper_funcs.plot_segment_general import PlotSegmentGeneral
-from soft_mobile_manipulator_control.helper_funcs.curves import PCCModel, PCCModelIMU, UTISpline
+from softrobots_dynamic_model.helper_funcs.plot_segment_general import PlotSegmentGeneral
+from softrobots_dynamic_model.helper_funcs.curves import PCCModel, PCCModelIMU, UTISpline
 
 
 def euler_from_quaternion(quaternion):
@@ -81,6 +81,11 @@ class OrientationConversionNode(Node):
         # load parameters
         self.seg_param = self.load_ms_sr(init_state, ref_state)
 
+        # IMU
+        self.subscriptions_imu = {'data_raw': np.zeros(3),
+                                  'data_raw_1': np.zeros(3),
+                                  'data_raw_2': np.zeros(3)}
+
         self._loop_root = self.create_rate(1/rate, self.get_clock())
         self.simulate()
 
@@ -89,6 +94,9 @@ class OrientationConversionNode(Node):
         pcc_model_curve, pcc_curve_data, name_pcc_from_code = self.create_pcc_curve()
         plotter.add_curve(name_pcc_from_code, pcc_curve_data)
 
+        pcc_from_imus = self.create_pcc_model_from_imu()
+        plotter.add_curve(pcc_from_imus[-1], pcc_from_imus[2])
+
         plotter.view()
         plotter.update_plot()
 
@@ -96,12 +104,23 @@ class OrientationConversionNode(Node):
         try:
             while self.current_time < self.simulation_time:
                 rclpy.spin_once(self)
+                print("-------------")
+                for key, imu in self.subscriptions_imu.items():
+                  print(f"{key}: {np.round(imu, 3)}")
 
                 # Update PCC Model data
                 state = np.array(
                     self.seg_param['state'][0:self.n_links*2]).reshape(-1, 1)
                 pcc_curve_data = pcc_model_curve.generate_curve(state)
                 plotter.update_curve_data(name_pcc_from_code, pcc_curve_data)
+
+                state_from_imu = pcc_from_imus[1].generate_curve(
+                            self.subscriptions_imu)
+                pcc_curve_data_imu =\
+                    pcc_from_imus[0].generate_curve(state_from_imu)
+                plotter.update_curve_data(
+                    pcc_from_imus[-1],
+                    pcc_curve_data_imu)
                 
                 # Update plot
                 plotter.update_plot()
@@ -257,6 +276,42 @@ class OrientationConversionNode(Node):
         # Add PCC model to the graph
         name_pcc_from_code = "PCC Model - From code"
         return pcc_model_curve, pcc_curve_data, name_pcc_from_code
+    
+    def create_pcc_model_from_imu(self):
+        """
+        Create the PCC curve based on the IMUs sensors.
+
+        Returns
+        -------
+        pcc_model_curve_imu: PCCModel
+            PCC model based on the dynamic equations
+        pcc_model_from_imu: PCCModelIMU
+            PCC model based on the IMU sensors
+        pcc_curve_data_imu: np.array
+            PCC curve data based on the IMU sensors
+        name_pcc_from_imus: str
+            Name of the PCC curve based on the IMU sensors
+
+        """
+        pcc_model_curve_imu = PCCModel(
+            self.seg_param, self.n_links)
+
+        pcc_model_from_imu = PCCModelIMU(
+            self.subscriptions_imu,
+            "data_raw",
+            ["data_raw_1", "data_raw_2"],
+            self.n_links,
+            self.seg_param['L'])
+
+        state_from_imu = pcc_model_from_imu.generate_curve(
+            self.subscriptions_imu)
+        pcc_curve_data_imu =\
+            pcc_model_curve_imu.generate_curve(state_from_imu)
+
+        # Add PCC model to the graph
+        name_pcc_from_imus = "PCC Model - From IMUs"
+        return pcc_model_curve_imu, pcc_model_from_imu, \
+            pcc_curve_data_imu, name_pcc_from_imus
 
     def imu_callback(self, msg):
         euler_angles = self.orientation_to_euler(msg.orientation)
@@ -265,6 +320,7 @@ class OrientationConversionNode(Node):
         euler_msg.y = euler_angles[1]  
         euler_msg.z = euler_angles[2]  
         self.euler_pub.publish(euler_msg)
+        self.subscriptions_imu['data_raw'] = np.array(euler_angles)
 
     def imu1_callback(self, msg):
         euler_angles = self.orientation_to_euler(msg.orientation)
@@ -273,6 +329,7 @@ class OrientationConversionNode(Node):
         euler_msg.y = euler_angles[1]  
         euler_msg.z = euler_angles[2]  
         self.euler_pub1.publish(euler_msg)
+        self.subscriptions_imu['data_raw_2'] = np.array(euler_angles)
 
     def imu2_callback(self, msg):
         euler_angles = self.orientation_to_euler(msg.orientation)
@@ -281,6 +338,7 @@ class OrientationConversionNode(Node):
         euler_msg.y = euler_angles[1]  
         euler_msg.z = euler_angles[2]  
         self.euler_pub2.publish(euler_msg)
+        self.subscriptions_imu['data_raw_1'] = np.array(euler_angles)
 
     def orientation_to_euler(self, orientation):
         quaternion = (
@@ -290,6 +348,8 @@ class OrientationConversionNode(Node):
             orientation.w
         )
         euler_angles = euler_from_quaternion(quaternion)
+        # euler_angles = np.array(euler_angles)
+        # euler_angles[-1] = 0
         return euler_angles
 
 def main(args=None):
