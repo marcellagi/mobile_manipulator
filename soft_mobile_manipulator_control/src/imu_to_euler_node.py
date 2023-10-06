@@ -274,7 +274,7 @@ class OrientationConversionNode(Node):
             self.seg_param['state'][0:self.n_links*2]).reshape(-1, 1)
         pcc_curve_data = pcc_model_curve.generate_curve(state)
         # Add PCC model to the graph
-        name_pcc_from_code = "PCC Model - From code"
+        name_pcc_from_code = ""
         return pcc_model_curve, pcc_curve_data, name_pcc_from_code
     
     def create_pcc_model_from_imu(self):
@@ -348,8 +348,8 @@ class OrientationConversionNode(Node):
             orientation.w
         )
         euler_angles = euler_from_quaternion(quaternion)
-        # euler_angles = np.array(euler_angles)
-        # euler_angles[-1] = 0
+        euler_angles = np.array(euler_angles)
+        euler_angles[-1] = 0
         return euler_angles
 
 def main(args=None):

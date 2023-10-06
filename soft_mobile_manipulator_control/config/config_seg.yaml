@@ -18,7 +18,7 @@ phi_angles_init: [0, 0] # Init angles.
                         # avoid numerical issues Init angles
                         # Bending angle or inclination angle
                         # Angle in Z axis
-theta_angles_init: [-45, 45] # Bending angle or inclination angle
+theta_angles_init: [0, 0] # Bending angle or inclination angle
                           # Angle in the y axis
 ##########################
 ## TARGET
