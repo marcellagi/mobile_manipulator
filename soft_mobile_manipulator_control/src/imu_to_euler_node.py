@@ -104,9 +104,9 @@ class OrientationConversionNode(Node):
         try:
             while self.current_time < self.simulation_time:
                 rclpy.spin_once(self)
-                print("-------------")
-                for key, imu in self.subscriptions_imu.items():
-                  print(f"{key}: {np.round(imu, 3)}")
+                # print("-------------")
+                # for key, imu in self.subscriptions_imu.items():
+                  # print(f"{key}: {np.round(imu, 3)}")
 
                 # Update PCC Model data
                 state = np.array(

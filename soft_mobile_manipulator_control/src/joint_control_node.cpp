@@ -51,19 +51,21 @@ private:
             cmd_pub_->publish(stop_cmd);
         }
 
+          float max_angles = 0.25;
+
           std::vector<double> positions1 = {
-              joy_msg->axes[1] * -0.5, 
-              joy_msg->axes[0] * 0.5,
-              joy_msg->axes[1] * -0.5,
-              joy_msg->axes[0] * 0.5,
-              joy_msg->axes[1] * -0.5,
-              joy_msg->axes[0] * 0.5,
-              joy_msg->axes[4] * -0.5, 
-              joy_msg->axes[3] * 0.5,
-              joy_msg->axes[4] * -0.5,
-              joy_msg->axes[3] * 0.5,
-              joy_msg->axes[4] * -0.5,
-              joy_msg->axes[3] * 0.5
+              joy_msg->axes[1] * -max_angles, 
+              joy_msg->axes[0] * max_angles,
+              joy_msg->axes[1] * -max_angles,
+              joy_msg->axes[0] * max_angles,
+              joy_msg->axes[1] * -max_angles,
+              joy_msg->axes[0] * max_angles,
+              joy_msg->axes[4] * -max_angles, 
+              joy_msg->axes[3] * max_angles,
+              joy_msg->axes[4] * -max_angles,
+              joy_msg->axes[3] * max_angles,
+              joy_msg->axes[4] * -max_angles,
+              joy_msg->axes[3] * max_angles
           };
       
 
