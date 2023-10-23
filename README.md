@@ -25,7 +25,7 @@ $ ros2 launch soft_mobile_manipulator_control husky_playpen.launch.py
 $ ros2 run soft_mobile_manipulator_control joint_control_node
 ```
 
-## remote control
+## imu node
 ```sh
 $ ros2 run soft_mobile_manipulator_control imu_to_euler_node.py
 ```
