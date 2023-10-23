@@ -423,6 +423,8 @@ class PCCModelIMU(GeneratelCurve):
             # Calculate the phi angle or the orientation (rotation around Z)
             if imu_index == 0:
                 z_proj_prev_frame = rot_mat_world_zyx[:, 2]
+                print(f"z_proj_prev_frame[0] [{imu_index}]: {z_proj_prev_frame[0]}")
+                print(f"z_proj_prev_frame[1] [{imu_index}]: {z_proj_prev_frame[1]}")
                 phi = np.arctan2(z_proj_prev_frame[1], z_proj_prev_frame[0])
 
                 # Theta signal is necessary to keep the theta angle between
@@ -432,6 +434,7 @@ class PCCModelIMU(GeneratelCurve):
                 theta_signal = -1 if phi > np.pi/2 or phi < -np.pi/2 else 1
 
                 phi = self.fix_phi_angle(phi)
+                print(f"Phi [{imu_index}]: {phi}")
                 phi_list[imu_index] = phi
 
                 # It is necessary to normalize the third column of the
@@ -440,6 +443,7 @@ class PCCModelIMU(GeneratelCurve):
                 length = np.linalg.norm(rot_mat_world_zyx[:, 2])
                 normalized_third_column = rot_mat_world_zyx[:, 2] / length
                 theta = np.arccos(normalized_third_column[2]) * theta_signal
+                print(f"Theta [{imu_index}]: {theta}")
 
                 # We need to reconstruct the homogeneous transformation matrix
                 # based on the phi and theta angles because the orientation
