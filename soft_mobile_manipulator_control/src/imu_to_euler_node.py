@@ -102,12 +102,8 @@ class OrientationConversionNode(Node):
 
         self.current_time = 0.0
         try:
-            while self.current_time < self.simulation_time:
+            while rclpy.ok():
                 rclpy.spin_once(self)
-                # print("-------------")
-                # for key, imu in self.subscriptions_imu.items():
-                  # print(f"{key}: {np.round(imu, 3)}")
-
                 # Update PCC Model data
                 state = np.array(
                     self.seg_param['state'][0:self.n_links*2]).reshape(-1, 1)
@@ -122,6 +118,13 @@ class OrientationConversionNode(Node):
                     pcc_from_imus[-1],
                     pcc_curve_data_imu)
                 
+                # Positions from IMU.
+                # TODO: Compare with TF Data
+                position_seg_1 = np.array(pcc_curve_data_imu)[:, 26]
+                print(f"Position seg 1 (x1, y1, z1): {position_seg_1}")
+                position_seg_2 = np.array(pcc_curve_data_imu)[:, 51]
+                print(f"Position seg 2 (x2, y2, z2): {position_seg_2}")
+
                 # Update plot
                 plotter.update_plot()
 
@@ -305,13 +308,14 @@ class OrientationConversionNode(Node):
 
         state_from_imu = pcc_model_from_imu.generate_curve(
             self.subscriptions_imu)
+
+        # Kinematics
         pcc_curve_data_imu =\
             pcc_model_curve_imu.generate_curve(state_from_imu)
 
         # Add PCC model to the graph
         name_pcc_from_imus = "PCC Model - From IMUs"
-        return pcc_model_curve_imu, pcc_model_from_imu, \
-            pcc_curve_data_imu, name_pcc_from_imus
+        return pcc_model_curve_imu, pcc_model_from_imu, pcc_curve_data_imu, name_pcc_from_imus
 
     def imu_callback(self, msg):
         euler_angles = self.orientation_to_euler(msg.orientation)
