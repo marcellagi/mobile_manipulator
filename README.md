@@ -3,18 +3,22 @@
 
 ## How to use
 ```sh
-$ git clone -b 2-section git@github.com:Brazilian-Institute-of-Robotics/soft_gazebo_cobra_simulation.git 
+$ git clone -b 2-sections git@github.com:Brazilian-Institute-of-Robotics/soft_gazebo_cobra_simulation.git 
 ```
 ```sh
 $ git clone -b humble-devel git@github.com:ros-visualization/interactive_marker_twist_server.git
 ```
-
+```sh
+$ git clone git@github.com:Brazilian-Institute-of-Robotics/softrobots_dynamic_model.git
+```
 ```sh
 $ git clone -b humble-devel git@github.com:husky/husky.git 
 ```
 ```sh
 $ git clone git@github.com:marcellagi/mobile_manipulator.git
 ```
+
+## simulation
 
 ```sh
 $ ros2 launch soft_mobile_manipulator_control husky_playpen.launch.py

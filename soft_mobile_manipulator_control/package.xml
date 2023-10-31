@@ -30,7 +30,7 @@
   <depend>ros2launch</depend>
   <depend>diff_drive_controller</depend>
   <depend>soft_mobile_manipulator_description</depend>
-
+  <depend>tf2_ros</depend>
   <depend>sensor_msgs</depend>
   <depend>control_msgs</depend>
   <depend>trajectory_msgs</depend>
