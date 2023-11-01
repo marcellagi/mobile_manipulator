@@ -16,6 +16,7 @@ controller_manager:
 
 husky_velocity_controller:
   ros__parameters:
+    use_sim_time: true
     left_wheel_names: ["front_left_wheel_joint", "rear_left_wheel_joint"]
     right_wheel_names: ["front_right_wheel_joint", "rear_right_wheel_joint"]
 
@@ -73,7 +74,7 @@ husky_velocity_controller:
 
 position_controller:
   ros__parameters:
-    # use_sim_time: true
+    use_sim_time: true
     joints:
       - cobra_body_1_joint
       - cobra_body_1_aux_joint

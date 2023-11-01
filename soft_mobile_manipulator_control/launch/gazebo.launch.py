@@ -59,6 +59,7 @@ def generate_launch_description():
         executable='spawner',
         arguments=['husky_velocity_controller', '-c', '/controller_manager'],
         output='screen',
+        parameters=[{'use_sim_time': True}],
     )
 
     spawn_cobra_controller = Node(
