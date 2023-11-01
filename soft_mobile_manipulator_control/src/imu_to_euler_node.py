@@ -3,6 +3,7 @@ import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Imu
 from geometry_msgs.msg import Vector3
+from std_msgs.msg import Float64MultiArray
 import numpy as np
 import yaml
 import os
@@ -65,6 +66,14 @@ class OrientationConversionNode(Node):
             Vector3,
             'euler_orientation_imu_2_topic', 
             10)
+        self.sec_pub1 = self.create_publisher(
+            Float64MultiArray,
+            'sec_1_topic', 
+            10)
+        self.sec_pub2 = self.create_publisher(
+            Float64MultiArray,
+            'sec_2_topic', 
+            10)
         rate = 60
 
         # Load yaml file containing the soft robot parameters
@@ -124,6 +133,15 @@ class OrientationConversionNode(Node):
                 print(f"Position seg 1 (x1, y1, z1): {position_seg_1}")
                 position_seg_2 = np.array(pcc_curve_data_imu)[:, 51]
                 print(f"Position seg 2 (x2, y2, z2): {position_seg_2}")
+
+                msg1 = Float64MultiArray()
+                msg1.data = position_seg_1.tolist()
+
+                msg2 = Float64MultiArray()
+                msg2.data = position_seg_2.tolist()
+
+                self.sec_pub1.publish(msg1)
+                self.sec_pub2.publish(msg2)
 
                 # Update plot
                 plotter.update_plot()
