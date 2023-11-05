@@ -49,6 +49,7 @@ install(TARGETS
 ament_python_install_package(${PROJECT_NAME})
 install(PROGRAMS
   src/imu_to_euler_node.py
+  src/matrix.py
   helper_funcs/curves.py
   helper_funcs/plot_segment_general.py
   DESTINATION lib/${PROJECT_NAME}

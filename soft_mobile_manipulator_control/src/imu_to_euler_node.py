@@ -2,12 +2,18 @@
 import rclpy
 from rclpy.node import Node
 from sensor_msgs.msg import Imu
-from geometry_msgs.msg import Vector3
+from geometry_msgs.msg import Vector3, TransformStamped, Pose
 from std_msgs.msg import Float64MultiArray
 import numpy as np
 import yaml
 import os
-
+import tf2_ros
+from tf2_ros.buffer import Buffer
+from tf2_ros.transform_listener import TransformListener
+from geometry_msgs.msg import Twist
+from time import time
+from tf2_ros import TransformException
+from nav_msgs.msg import Odometry
 from ament_index_python.packages import get_package_share_directory
 from softrobots_dynamic_model.helper_funcs.plot_segment_general import PlotSegmentGeneral
 from softrobots_dynamic_model.helper_funcs.curves import PCCModel, PCCModelIMU, UTISpline
@@ -76,6 +82,15 @@ class OrientationConversionNode(Node):
             10)
         rate = 60
 
+        self.time = time()
+
+        self.tf_buffer = Buffer()
+        self.tf_listener = TransformListener(self.tf_buffer, self)
+
+        self.tf_pub = self.create_publisher(TransformStamped, 'transform', 10)
+        self.timer = self.create_timer(0.001, self.publishTransform)
+
+
         # Load yaml file containing the soft robot parameters
         self.load_yaml_params("config_seg.yaml")
 
@@ -97,6 +112,24 @@ class OrientationConversionNode(Node):
 
         self._loop_root = self.create_rate(1/rate, self.get_clock())
         self.simulate()
+
+
+    def publishTransform(self):
+        
+        try:
+            transform = self.tf_buffer.lookup_transform("odom",
+                                                        "imu_link_manipulator",
+                                                        rclpy.time.Time())
+
+            self.tf_pub.publish(transform)
+
+        except TransformException as ex:
+            if time() - self.time > 1.0:
+                self.time = time()
+                self.get_logger().info(f'Could not transform: {ex}')
+            return
+
+
 
     def simulate(self):
         plotter = PlotSegmentGeneral()
@@ -130,9 +163,9 @@ class OrientationConversionNode(Node):
                 # Positions from IMU.
                 # TODO: Compare with TF Data
                 position_seg_1 = np.array(pcc_curve_data_imu)[:, 26]
-                print(f"Position seg 1 (x1, y1, z1): {position_seg_1}")
+                # print(f"Position seg 1 (x1, y1, z1): {position_seg_1}")
                 position_seg_2 = np.array(pcc_curve_data_imu)[:, 51]
-                print(f"Position seg 2 (x2, y2, z2): {position_seg_2}")
+                # print(f"Position seg 2 (x2, y2, z2): {position_seg_2}")
 
                 msg1 = Float64MultiArray()
                 msg1.data = position_seg_1.tolist()
