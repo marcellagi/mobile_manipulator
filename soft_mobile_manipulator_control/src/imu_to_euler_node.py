@@ -87,8 +87,8 @@ class OrientationConversionNode(Node):
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
 
-        self.tf_pub = self.create_publisher(TransformStamped, 'transform', 10)
-        self.timer = self.create_timer(0.001, self.publishTransform)
+        # self.tf_pub = self.create_publisher(TransformStamped, 'transform', 10)
+        # self.timer = self.create_timer(0.001, self.publishTransform)
 
 
         # Load yaml file containing the soft robot parameters

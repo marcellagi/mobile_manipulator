@@ -34,5 +34,5 @@ theta_angles_target: [19, 45] # Bending angle or inclination angle
 ## SEGMENT LENGTHS
 ##########################
 s: [1, 1]
-segment_length: [1.12228, 0.633] # comprimento do segmento
+segment_length: [0.99, 0.633] # comprimento do segmento
 segment_normalized_size: [1, 1]
